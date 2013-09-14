@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+  <head>
+    <title metal:define-slot='title'>wtm</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+    <meta name="keywords" content="python web application" />
+    <meta name="description" content="pyramid web application" />
+  </head>
+  <body>
+    <div class="container-fluid">
+      <tal:message condition="request.session.peek_flash()">
+	<div class="alert"
+             tal:repeat="message request.session.pop_flash()">
+	  <button type="button" class="close" data-dismiss="alert">&times;</button>
+	  <tal:alert replace="structure message" />
+	</div>
+      </tal:message>
+    </div>
+
+    <div class="row-fluid">
+      <nav class="span2">
+	<ul class="nav nav-tabs  navbar-fixed-top">
+	  <li tal:condition='request.path != "/"'>
+	    <a href="${request.route_path('home')}" i18n:translate='' class="new">new</a>
+	  </li>
+	</ul>
+      </nav>
+
+      <article class="span9">
+	<div id="content" metal:define-slot="content"></div>
+      </article>
+
+    </div>
+
+  </body>
+</html>
+

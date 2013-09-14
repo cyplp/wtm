@@ -19,6 +19,7 @@ requires = [
     'Babel',
     'lingua',
     'py-bcrypt',
+    'lxml',
 #    'pyramid_rpc',
     ]
 

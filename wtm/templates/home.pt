@@ -1,0 +1,32 @@
+<metal:main
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    use-macro="load: layout.pt">
+
+  <div metal:fill-slot="content">
+    <script>
+      navigator.geolocation.getCurrentPosition(function(position) {
+      var infopos = "Position dÃ©terminÃ©e :\n";
+      infopos += "Latitude : "+position.coords.latitude +"\n";
+      infopos += "Longitude: "+position.coords.longitude+"\n";
+      infopos += "Altitude : "+position.coords.altitude +"\n";
+      document.getElementById("infoposition").innerHTML = infopos;
+      document.getElementById("lat").value = +position.coords.latitude;
+      document.getElementById("lon").value = +position.coords.longitude;
+      });
+    </script>
+    <h1 i18n:translate=''>Search a new stuff</h1>
+    <div id="infoposition"></div>
+    <form action="${request.route_path('addContent')}" method="POST">
+      <div class='row'>
+	<input type="hidden" name="lat" id="lat" />
+	<input type="hidden" name="lon" id="lon" />
+	<input type="submit" value="submit" />
+      </div>
+    </form>
+  </div>
+
+  <title metal:fill-slot="title">${request.registry.settings.title}</title>
+
+</metal:main>
