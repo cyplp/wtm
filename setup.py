@@ -12,6 +12,14 @@ requires = [
     'pyramid',
     'pyramid_debugtoolbar',
     'waitress',
+    'pyramid_fanstatic',
+    'rebecca.fanstatic',
+#    'couchdbkit',
+    'pyramid_beaker',
+    'Babel',
+    'lingua',
+    'py-bcrypt',
+#    'pyramid_rpc',
     ]
 
 setup(name='wtm',
