@@ -2,16 +2,20 @@ import urllib2
 
 from lxml import etree
 
+from deform import Form
+
 from pyramid.view import view_config
 
+from wtm.schemas.home import HomeSchema
 
 @view_config(route_name='home', renderer='templates/home.pt')
 def home(request):
     """
     home page
     """
+    homeForm = Form(HomeSchema(), buttons=('submit',), action=request.route_path('addContent'))
 
-    return {'project': 'wtm'}
+    return {'form': homeForm.render()}
 
 @view_config(route_name='addContent', renderer='json')
 def addContent(request):
@@ -19,6 +23,8 @@ def addContent(request):
     baseURL = 'http://www.overpass-api.de/api/interpreter'
 
     data = 'node(around:250.0,%s,%s)["amenity"="cafe"];out;' % (request.POST['lat'], request.POST['lon'])
+
+    print data
 
     url = urllib2.Request(baseURL, data)
 
@@ -32,3 +38,4 @@ def addContent(request):
 
 
     return ''
+

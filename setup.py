@@ -20,6 +20,7 @@ requires = [
     'lingua',
     'py-bcrypt',
     'lxml',
+    'deform',
 #    'pyramid_rpc',
     ]
 
