@@ -43,9 +43,15 @@ def addContent(request):
 
     places = []
     for name in names:
-        current = {'name': name,
-                   'urls' : [processingImg(name, result['url']) for result in seeksRequest(name)['snippets']]}
-        places.append(current)
+        _logger.info("seeking %s", name)
+        try:
+            current = {'name': name,
+                       'urls' : [processingImg(name, result['url'])
+                                 for result in seeksRequest(name.encode('utf-8'))['snippets']]}
+            places.append(current)
+        except UnicodeEncodeError:
+            _logger.error('unicode error %s', name)
+            continue
 
     return {'places': places}
 
