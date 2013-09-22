@@ -22,7 +22,9 @@ def addContent(request):
 
     baseURL = 'http://www.overpass-api.de/api/interpreter'
 
-    data = 'node(around:250.0,%s,%s)["amenity"="cafe"];out;' % (request.POST['lat'], request.POST['lon'])
+    data = 'node(around:%s.0,%s,%s)["amenity"="cafe"];out;' % (request.POST['dist'],
+                                                               request.POST['lat'],
+                                                               request.POST['lon'])
 
     print data
 
