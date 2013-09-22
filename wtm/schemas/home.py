@@ -14,3 +14,6 @@ class HomeSchema(colander.MappingSchema):
 
 
 
+    dist = colander.SchemaNode(colander.Integer(),
+                               validator=colander.Range(50,30000),
+                               oid='dist')
