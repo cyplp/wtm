@@ -7,6 +7,8 @@ from pyramid.threadlocal import get_current_registry as gcr
 
 from beaker.cache import cache_region
 
+import requests
+
 settings = gcr().settings
 
 @view_config(route_name='home', renderer='templates/home.pt')
@@ -31,8 +33,33 @@ def addContent(request):
 
     names = [node.get('v') for node in xml.xpath('node/tag[@k="name"]')]
 
-    return ''
+    places = []
+    for name in names:
+        current = {'name': name,
+                   'urls' : [processingImg(name, result['url']) for result in seeksRequest(name)['snippets']]}
+        places.append(current)
 
+    return {'places': places}
+
+@cache_region('short_term', 'image')
+def processingImg(name, url):
+    """
+    """
+    req = requests.get(url)
+
+    tmp = req.content
+    sha1 = hashlib.sha1()
+
+    sha1.update(tmp)
+
+    es.put('wtm/images/'+sha1.hexdigest(),
+           data={'url': url,
+                 'name': name,
+                 'user': False,
+                 #'dt_insert': datetime.datetime.now()
+                 })
+
+    return url
 @cache_region('short_term', 'overpass')
 def overpassRequest(dist, lat, lon):
     """
@@ -44,3 +71,14 @@ def overpassRequest(dist, lat, lon):
 
     return  urllib2.urlopen(url).read()
 
+@cache_region('short_term', 'seeks')
+def seeksRequest(requestedTerm):
+    """
+    """
+    payload = {'output': 'json',
+               'q': requestedTerm}
+
+    baseURL = settings['seeks_url']
+    req = requests.get(baseURL+'/search_img', params=payload)
+
+    return req.json()
