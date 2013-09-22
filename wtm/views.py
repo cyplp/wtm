@@ -17,7 +17,7 @@ def home(request):
 
     return {}
 
-@view_config(route_name='addContent', renderer='json')
+@view_config(route_name='addContent', renderer='templates/addContent.pt')
 def addContent(request):
     """
 
