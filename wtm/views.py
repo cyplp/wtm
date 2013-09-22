@@ -3,8 +3,9 @@ import urllib2
 from lxml import etree
 
 from pyramid.view import view_config
+from pyramid.threadlocal import get_current_registry as gcr
 
-from wtm.schemas.home import HomeSchema
+settings = gcr().settings
 
 @view_config(route_name='home', renderer='templates/home.pt')
 def home(request):
@@ -17,7 +18,8 @@ def home(request):
 @view_config(route_name='addContent', renderer='json')
 def addContent(request):
 
-    baseURL = 'http://www.overpass-api.de/api/interpreter'
+    baseURL = settings['overpass_url']
+
     data = 'node(around:%s.0,%s,%s)["amenity"="cafe"];out;' % (request.POST['dist'],
                                                                request.POST['lat'],
                                                                request.POST['lon'])
