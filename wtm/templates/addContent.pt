@@ -1,0 +1,19 @@
+<metal:main
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    use-macro="load: layout.pt">
+
+  <div metal:fill-slot="content">
+    <h1 i18n:translate=''>Stuff found</h1>
+    <div tal:repeat="place places">
+      <h2>${place['name']}</h2>
+      <div >
+	<img tal:repeat="url place['urls']" src="${url}" />
+      </div>
+    </div>
+  </div>
+
+  <title metal:fill-slot="title">${request.registry.settings.title}</title>
+
+</metal:main>
