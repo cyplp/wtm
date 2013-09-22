@@ -24,6 +24,7 @@ requires = [
     'colander',
     'pyramid_rawes',
     'kombu',
+    'thrift',
 #    'pyramid_rpc',
     ]
 
