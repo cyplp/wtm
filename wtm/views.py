@@ -2,8 +2,6 @@ import urllib2
 
 from lxml import etree
 
-from deform import Form
-
 from pyramid.view import view_config
 
 from wtm.schemas.home import HomeSchema
@@ -13,9 +11,8 @@ def home(request):
     """
     home page
     """
-    homeForm = Form(HomeSchema(), buttons=('submit',), action=request.route_path('addContent'))
 
-    return {'form': homeForm.render()}
+    return {}
 
 @view_config(route_name='addContent', renderer='json')
 def addContent(request):
