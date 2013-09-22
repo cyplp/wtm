@@ -59,7 +59,14 @@ def addContent(request):
 def processingImg(name, url):
     """
     """
-    req = requests.get(url)
+    _logger.info("processing %s", url)
+    try:
+        req = requests.get(url.encode('utf-8'))
+    except UnicodeEncodeError:
+        _logger.error('unicode error %s', url)
+        return url
+
+    _logger.info("got %s", url)
 
     tmp = req.content
     sha1 = hashlib.sha1()
