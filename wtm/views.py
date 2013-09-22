@@ -1,6 +1,7 @@
 import urllib2
 import hashlib
 import datetime
+import logging
 
 from lxml import etree
 
@@ -14,6 +15,9 @@ import requests
 settings = gcr().settings
 
 es = settings['ES']
+
+_logger = logging.getLogger('views')
+
 
 @view_config(route_name='home', renderer='templates/home.pt')
 def home(request):
@@ -55,7 +59,7 @@ def processingImg(name, url):
     sha1 = hashlib.sha1()
 
     sha1.update(tmp)
-
+    _logger.info("sha1 %s", sha1.hexdigest())
     es.put('wtm/images/'+sha1.hexdigest(),
            data={'url': url,
                  'name': name,
