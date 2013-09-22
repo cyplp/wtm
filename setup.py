@@ -20,7 +20,10 @@ requires = [
     'lingua',
     'py-bcrypt',
     'lxml',
-    'deform',
+    'requests',
+    'colander',
+    'pyramid_rawes',
+    'kombu',
 #    'pyramid_rpc',
     ]
 

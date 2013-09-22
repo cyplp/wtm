@@ -1,4 +1,6 @@
 import urllib2
+import hashlib
+import datetime
 
 from lxml import etree
 
@@ -10,6 +12,8 @@ from beaker.cache import cache_region
 import requests
 
 settings = gcr().settings
+
+es = settings['ES']
 
 @view_config(route_name='home', renderer='templates/home.pt')
 def home(request):
