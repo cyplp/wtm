@@ -18,11 +18,12 @@
     </script>
     <h1 i18n:translate=''>Search a new stuff</h1>
     <div id="infoposition"></div>
-    <form action="${request.route_path('addContent')}" method="POST">
+    <form action="${request.route_path('addContent')}" method="POST" enctype="multipart/form-data">
       <div class='row'>
 	<input type="hidden" name="lat" id="lat" />
 	<input type="hidden" name="lon" id="lon" />
 	<input type="range" name="dist" id="dist" min="100" max="25000" step="10"/> <!-- todo display value -->
+	<input type="file" name="photo" id="photo" value=''/>
 	<input type="submit" value="submit" />
       </div>
     </form>

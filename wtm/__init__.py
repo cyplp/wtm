@@ -25,8 +25,11 @@ def main(global_config, **settings):
     get_current_registry().settings = settings
 
     config.add_static_view('static', 'static', cache_max_age=3600)
+
     config.add_route('home', '/')
     config.add_route('addContent', '/addContent')
+    config.add_route('content', '/content/{imgID}')
+    config.add_route('image', '/image/{imgID}')
 
     # print settings['resources'].split(',')
     # print [resource.strip() for resource in settings['resources'].split(',')]

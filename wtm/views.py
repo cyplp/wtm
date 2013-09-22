@@ -2,11 +2,15 @@ import urllib2
 import hashlib
 import datetime
 import logging
+import binascii
 
 from lxml import etree
 
 from pyramid.view import view_config
+from pyramid.httpexceptions import HTTPFound
+from pyramid.httpexceptions import HTTPNotFound
 from pyramid.threadlocal import get_current_registry as gcr
+from pyramid.response import Response
 
 from beaker.cache import cache_region
 
@@ -33,27 +37,67 @@ def addContent(request):
 
     """
 
-    xmlData = overpassRequest (request.POST['dist'],
-                               request.POST['lat'],
-                               request.POST['lon'])
+    tmp = request.POST['photo'].file.read()
 
-    xml = etree.fromstring(xmlData)
+    sha1 = hashlib.sha1()
 
-    names = [node.get('v') for node in xml.xpath('node/tag[@k="name"]')]
+    sha1.update(tmp)
+    sha1sum = sha1.hexdigest()
+    _logger.info("sha1 %s", sha1sum)
 
-    places = []
-    for name in names:
-        _logger.info("seeking %s", name)
-        try:
-            current = {'name': name,
-                       'urls' : [processingImg(name, result['url'])
-                                 for result in seeksRequest(name.encode('utf-8'))['snippets']]}
-            places.append(current)
-        except UnicodeEncodeError:
-            _logger.error('unicode error %s', name)
-            continue
+    es.put('wtm/images/' + sha1sum,
+           data={
+                 'user': True,
+                 'data': binascii.b2a_base64(tmp),
+                 #'dt_insert': datetime.datetime.now()
+                 'found': False
+                 })
 
-    return {'places': places}
+    return HTTPFound(request.route_path('content', imgID=sha1sum))
+
+    # xmlData = overpassRequest (request.POST['dist'],
+    #                            request.POST['lat'],
+    #                            request.POST['lon'])
+
+    # xml = etree.fromstring(xmlData)
+
+    # names = [node.get('v') for node in xml.xpath('node/tag[@k="name"]')]
+
+    # places = []
+    # return places
+
+    # for name in names:
+    #     _logger.info("seeking %s", name)
+    #     try:
+    #         current = {'name': name,
+    #                    'urls' : [processingImg(name, result['url'])
+    #                              for result in seeksRequest(name.encode('utf-8'))['snippets']]}
+    #         places.append(current)
+    #     except UnicodeEncodeError:
+    #         _logger.error('unicode error %s', name)
+    #         continue
+
+#    return {'places': places}
+
+@view_config(route_name='content', renderer='templates/content.pt')
+def content(request):
+
+    image = es.get('wtm/images/'+request.matchdict['imgID'])
+
+    if image['_source']['user']:
+        return {'image': image}
+
+    else:
+        raise HTTPNotFound()
+
+@view_config(route_name='image')
+def image(request):
+
+    image = es.get('wtm/images/'+request.matchdict['imgID'])
+
+    rep = Response()
+    rep.body = binascii.a2b_base64(image['_source']['data'])
+    return rep
 
 @cache_region('short_term', 'image')
 def processingImg(name, url):
