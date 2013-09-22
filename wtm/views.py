@@ -17,25 +17,28 @@ def home(request):
 
 @view_config(route_name='addContent', renderer='json')
 def addContent(request):
+    """
 
-    baseURL = settings['overpass_url']
+    """
 
-    data = 'node(around:%s.0,%s,%s)["amenity"="cafe"];out;' % (request.POST['dist'],
-                                                               request.POST['lat'],
-                                                               request.POST['lon'])
+    xmlData = overpassRequest (request.POST['dist'],
+                               request.POST['lat'],
+                               request.POST['lon'])
 
-    print data
-
-    url = urllib2.Request(baseURL, data)
-
-    xmlData = urllib2.urlopen(url).read()
-
+    print xmlData
     xml = etree.fromstring(xmlData)
 
-
-    for node in xml.xpath('node/tag[@k="name"]'):
-        print node.get('v')
-
+    names = [node.get('v') for node in xml.xpath('node/tag[@k="name"]')]
+    print names
 
     return ''
+
+def overpassRequest(dist, lat, lon):
+    """
+    """
+    baseURL = settings['overpass_url']
+    data = 'node(around:%s.0,%s,%s)["tourism"="museum"];out;' % (dist, lat, lon)
+    url = urllib2.Request(baseURL, data)
+
+    return  urllib2.urlopen(url).read()
 
