@@ -77,6 +77,7 @@ def processingImg(name, url):
            data={'url': url,
                  'name': name,
                  'user': False,
+                 'data': req.text,
                  #'dt_insert': datetime.datetime.now()
                  })
 
