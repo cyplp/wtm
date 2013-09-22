@@ -18,7 +18,14 @@
     </script>
     <h1 i18n:translate=''>Search a new stuff</h1>
     <div id="infoposition"></div>
-    <span tal:replace="structure form"/>
+    <form action="${request.route_path('addContent')}" method="POST">
+      <div class='row'>
+	<input type="hidden" name="lat" id="lat" />
+	<input type="hidden" name="lon" id="lon" />
+	<input type="range" name="dist" id="dist" min="100" max="25000" step="10"/> <!-- todo display value -->
+	<input type="submit" value="submit" />
+      </div>
+    </form>
 
   </div>
 
