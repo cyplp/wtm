@@ -1,0 +1,14 @@
+<metal:main
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    use-macro="load: layout.pt">
+
+  <div metal:fill-slot="content">
+    <h1 i18n:translate=''>Stuff found</h1>
+    <img src="${request.route_path('image', imgID=image['_id'])}" />
+  </div>
+
+  <title metal:fill-slot="title">${request.registry.settings.title}</title>
+
+</metal:main>
