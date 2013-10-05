@@ -34,6 +34,6 @@ def main(global_config, **settings):
     # print settings['resources'].split(',')
     # print [resource.strip() for resource in settings['resources'].split(',')]
 
-    # config.add_fanstatic_resources([resource.strip() for resource in settings['resources'].split(',')], r'.*\.pt')
+    config.add_fanstatic_resources([resource.strip() for resource in settings['resources'].split(',')], r'.*\.pt')
     config.scan()
     return config.make_wsgi_app()
