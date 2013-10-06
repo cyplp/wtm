@@ -14,7 +14,7 @@ requires = [
     'waitress',
     'pyramid_fanstatic',
     'rebecca.fanstatic',
-#    'couchdbkit',
+
     'pyramid_beaker',
     'Babel',
     'lingua',
@@ -25,7 +25,7 @@ requires = [
     'pyramid_rawes',
     'kombu',
     'thrift',
-#    'pyramid_rpc',
+
     ]
 
 setup(name='wtm',
@@ -51,5 +51,7 @@ setup(name='wtm',
       entry_points="""\
       [paste.app_factory]
       main = wtm:main
+      [console_scripts]
+      processor = wtm.processor:main
       """,
       )
